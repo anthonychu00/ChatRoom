@@ -25,4 +25,4 @@ Send "Hi how are you" to a client associated with the name Joe, if one exists.
 different functionality.
 
 * https://steelkiwi.com/blog/working-tcp-sockets/ was very helpful in figuring out what some of the boilerplate looked like
-for implementing sockets in Python and providing the idea to use an infinite loop that blocks at certain points for the server and client.
+for implementing reading and writing from sockets in Python, and providing the idea to use an infinite loop that blocks at certain points for the server and client.
