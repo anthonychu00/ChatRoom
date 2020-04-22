@@ -67,3 +67,6 @@ different functionality. I'm not sure if msvcrt will cause problems in other ter
 for implementing reading and writing from sockets in Python, and providing the idea to use an infinite loop that blocks at certain points for the server and client.
 
 ![](https://github.com/anthonychu00/Chatroom/blob/master/Server.png)
+![](https://github.com/anthonychu00/Chatroom/blob/master/Client1.png)
+![](https://github.com/anthonychu00/Chatroom/blob/master/Client2.png)
+![](https://github.com/anthonychu00/Chatroom/blob/master/Client3.png)
