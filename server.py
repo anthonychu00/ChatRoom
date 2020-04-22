@@ -41,28 +41,28 @@ def client_thread(client, addr, username):
     while True:
         # receives message from client, recv() blocks until there is actually something to receive
         message = client.recv(4096)
-        # sockets can only send and receive bytes,
+        # ********sockets can only send and receive bytes,
         # so they need to be encoded and decoded for sending/receiving messages respectively
         decoded_message = message.decode()
 
-        # if clients disconnects from other end, please don't press the x-button in the console window
+        # if clients disconnect from other end with ctrl + c, disconnect and kill this client thread
         if not message:
             print("Uh oh, something went wrong with " + username + ". They might have quit.")
             disconnect(client)
             thread.exit()
         else:
-            if decoded_message == "?":
+            if decoded_message == "?":  # client asking for list of active_clients
                 usernames = [c["user"] for c in active_clients]
                 user_list = "Active users: " + str(usernames)
                 encoded_user_list = user_list.encode()
                 client.send(encoded_user_list)
-            elif ">" in decoded_message:
+            elif ">" in decoded_message:  # client wants to send to specific recipient
                 arr = decoded_message.split(">")
                 recipient = arr[1].strip()
                 print("From user " + username + " : " + arr[0])
                 print("Send to: " + recipient)
                 send_one(arr[0], recipient, username, client)
-            else:
+            else:  # client is sending to all
                 print("From user " + username + " : " + decoded_message)
                 print("Send to all")
                 send_all(decoded_message,  client, username)
@@ -101,6 +101,7 @@ while True:
     # socket.accept() blocks until a new client connects
     client_socket, address = server.accept()
 
+    # when user client first registers, they are asked for a username, the server blocks until it receives one
     prompt = "Welcome! Please enter a username: "
     encoded_prompt = prompt.encode()
     client_socket.send(encoded_prompt)
@@ -111,7 +112,6 @@ while True:
     active_clients.append({"sock": client_socket, "user": decoded_username})
     print("New client connected: " + decoded_username)
 
-    # if user wants to type > they can probably use a backslash?
     instructions = "End your message with > followed by a username to send to one person, \n" \
                    "otherwise it will be sent to everyone. \n" \
                    "If you want to see a list of active users, press ?"

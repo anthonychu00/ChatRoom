@@ -5,7 +5,7 @@ import msvcrt
 # checks if user entered 3 arguments
 # ideally in this project, the IP address would be localhost (127.0.0.1) as well
 if len(sys.argv) != 3:
-    print ("Please enter args in following order: IP Address, port")
+    print("Please enter args in following order: IP Address, port")
     exit()
 
 IP = str(sys.argv[1])
@@ -23,9 +23,12 @@ while True:
     inputs = [client]
     # select.select assigns sockets to 3 categories: sockets that read input, write output, or report errors
     # the client only reads input, so the other socket lists are empty
-    # select.select() blocks until something is ready for reading from one of the input methods
+    # **select.select() blocks until something is ready for reading from one of the input methods
     read_list, write_list, error_list = select.select(inputs, [], [], 1)
-    # windows doesn't accept stdin as a socket
+
+    # windows doesn't accept stdin as a socket, so msvcrt is used to provide some of the functionality
+    # of using sys.stdin as a socket.
+    # The loop is blocked until user hits enter, if it detects input in sys.stdin
     if msvcrt.kbhit():
         read_list.append(sys.stdin)
 
@@ -38,7 +41,6 @@ while True:
         # input received from user, so user standard input writes
         else:
             message = sys.stdin.readline().replace('\n', '')
-            #append username to message here?
             b = message.encode()
             client.send(b)
             sys.stdout.flush()
