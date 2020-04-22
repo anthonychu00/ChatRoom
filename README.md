@@ -65,3 +65,5 @@ different functionality. I'm not sure if msvcrt will cause problems in other ter
 
 * https://steelkiwi.com/blog/working-tcp-sockets/ was very helpful in figuring out what some of the boilerplate looked like
 for implementing reading and writing from sockets in Python, and providing the idea to use an infinite loop that blocks at certain points for the server and client.
+
+![](https://github.com/anthonychu00/Chatroom/blob/master/Server.png)
