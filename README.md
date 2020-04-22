@@ -15,7 +15,9 @@ $ python client.py 127.0.0.1 80
 4. You are also given instructions while on the program on using some of the features in the program. 
 Most importantly, you can see all active clients as a client by entering "?", and can send to a specific individual with ">".
 For example:
+
 Hi how are you > Joe
+
 Send "Hi how are you" to a client associated with the name Joe, if one exists.
 
 5. Press Ctrl + c to properly exit a client. To close the server just manually close the terminal window. 
