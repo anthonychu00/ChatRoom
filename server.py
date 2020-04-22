@@ -13,6 +13,11 @@ IP = "127.0.0.1"
 if len(sys.argv) != 2:
     print("Please enter a port number.")
     exit()
+
+if not (sys.argv[1]).isdigit():
+    print("Port number is not an integer")
+    exit()
+
 port = int(sys.argv[1])
 
 # sets up a server socket

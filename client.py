@@ -8,6 +8,16 @@ if len(sys.argv) != 3:
     print("Please enter args in following order: IP Address, port")
     exit()
 
+if not (sys.argv[2]).isdigit():
+    print("Port number is not an integer.")
+    exit()
+
+try:
+    socket.inet_aton(sys.argv[1])
+except socket.error:
+    print("Enter a valid host address.")
+    exit()
+
 IP = str(sys.argv[1])
 port = int(sys.argv[2])
 
