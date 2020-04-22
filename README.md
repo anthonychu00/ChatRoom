@@ -21,7 +21,7 @@ Send "Hi how are you" to a client associated with the name Joe, if one exists.
 5. Press Ctrl + c to properly exit a client. To close the server just manually close the terminal window. 
 
 
-* This code was tested on a Windows machine. It might not work on a Linux or Mac since the Windows command prompt has 
+* This code was tested on a Windows machine. It might not work on a Linux or Mac machine since the Windows command prompt has 
 different functionality.
 
 * https://steelkiwi.com/blog/working-tcp-sockets/ was very helpful in figuring out what some of the boilerplate looked like
