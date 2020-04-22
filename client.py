@@ -34,11 +34,12 @@ while True:
     # select.select assigns sockets to 3 categories: sockets that read input, write output, or report errors
     # the client only reads input, so the other socket lists are empty
     # **select.select() blocks until something is ready for reading from one of the input methods
+    # The last argument is a timer to end the block, to work around getting stdin to function.
     read_list, write_list, error_list = select.select(inputs, [], [], 1)
 
-    # windows doesn't accept stdin as a socket, so msvcrt is used to provide some of the functionality
+    # Windows doesn't accept stdin as a socket, so msvcrt is used to provide some of the functionality
     # of using sys.stdin as a socket.
-    # The loop is blocked until user hits enter, if it detects input in sys.stdin
+    # Detects keyboard input, and the loop is blocked until user hits enter.
     if msvcrt.kbhit():
         read_list.append(sys.stdin)
 
