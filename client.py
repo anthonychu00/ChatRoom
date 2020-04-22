@@ -45,12 +45,10 @@ while True:
     for readable in read_list:
         # input received from server, so client itself writes
         if readable is client:
-            message = readable.recv(4096)
-            decoded_message = message.decode()
-            print(decoded_message)
+            message = readable.recv(4096).decode()
+            print(message)
         # input received from user, so user standard input writes
         else:
-            message = sys.stdin.readline().replace('\n', '')
-            b = message.encode()
-            client.send(b)
+            message = sys.stdin.readline().replace('\n', '').encode()
+            client.send(message)
             sys.stdout.flush()

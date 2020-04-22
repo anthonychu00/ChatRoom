@@ -53,17 +53,20 @@ def client_thread(client, addr, username):
         # if clients disconnect from other end with ctrl + c, disconnect and kill this client thread
         if not message:
             print("Uh oh, something went wrong with " + username + ". They might have quit.")
+            send_all(username + " has left the chat.", client, "")
             disconnect(client)
             thread.exit()
         else:
             if decoded_message == "?":  # client asking for list of active_clients
                 usernames = [c["user"] for c in active_clients]
-                user_list = "Active users: " + str(usernames)
-                encoded_user_list = user_list.encode()
-                client.send(encoded_user_list)
+                user_list = ("Active users: " + str(usernames)).encode()
+                client.send(user_list)
             elif ">" in decoded_message:  # client wants to send to specific recipient
                 arr = decoded_message.split(">")
                 recipient = arr[1].strip()
+                if recipient == "":
+                    reminder = "You forgot to name a recipient, or that username isn't valid.".encode()
+                    client.send(reminder)
                 print("From user " + username + " : " + arr[0])
                 print("Send to: " + recipient)
                 send_one(arr[0], recipient, username, client)
@@ -82,19 +85,17 @@ def disconnect(client):
 
 
 def send_all(message, client, user):
-    to_send = user + " : " + message
-    to_send_encoded = to_send.encode()
+    to_send = (user + " : " + message).encode()
     for c in active_clients:
         if c["sock"] is not client:
-            c["sock"].send(to_send_encoded)
+            c["sock"].send(to_send)
 
 
 def send_one(message, recipient, user, client):
-    to_send = user + " : " + message
-    to_send_encoded = to_send.encode()
+    to_send = (user + " : " + message).encode()
     for c in active_clients:
         if recipient == c["user"] and c["sock"] is not client:
-            c["sock"].send(to_send_encoded)
+            c["sock"].send(to_send)
 
 
 # constantly listens for new clients wanting to make a connection to the IP address and port
@@ -107,21 +108,18 @@ while True:
     client_socket, address = server.accept()
 
     # when user client first registers, they are asked for a username, the server blocks until it receives one
-    prompt = "Welcome! Please enter a username: "
-    encoded_prompt = prompt.encode()
-    client_socket.send(encoded_prompt)
+    prompt = "Welcome! Please enter a username: ".encode()
+    client_socket.send(prompt)
 
-    username = client_socket.recv(4096)
-    decoded_username = username.decode()
+    username = client_socket.recv(4096).decode()
 
-    active_clients.append({"sock": client_socket, "user": decoded_username})
-    print("New client connected: " + decoded_username)
+    active_clients.append({"sock": client_socket, "user": username})
+    print("New client connected: " + username)
 
     instructions = "End your message with > followed by a username to send to one person, \n" \
                    "otherwise it will be sent to everyone. \n" \
                    "If you want to see a list of active users, press ?"
-    welcome = "Glad to have you here, " + decoded_username + "\n" + instructions + "\n"
-    encoded_welcome = welcome.encode()
-    client_socket.send(encoded_welcome)
+    welcome = ("Glad to have you here, " + username + "\n" + instructions + "\n").encode()
+    client_socket.send(welcome)
 
-    thread.start_new_thread(client_thread, (client_socket, address, decoded_username))
+    thread.start_new_thread(client_thread, (client_socket, address, username))
